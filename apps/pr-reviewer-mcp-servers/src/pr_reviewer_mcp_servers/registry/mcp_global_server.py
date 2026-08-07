@@ -45,6 +45,7 @@ class StdioServerSpec:
 STDIO_SERVERS = [
     StdioServerSpec(name="agent_scope", script="agent_scope_server.py"),
     StdioServerSpec(name="asana", script="asana_server.py"),
+    StdioServerSpec(name="slack", script="slack_server.py"),
 ]
 
 # Remote servers someone else runs. Each entry is an async context
