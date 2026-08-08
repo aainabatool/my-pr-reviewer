@@ -132,6 +132,27 @@ platform of choice) for exposing `localhost:8000` publicly.
 - [x] Host connects through the registry, invokes tools and prompts
 - [x] Webhook verifies GitHub's signature and triggers a review
 - [x] Review pipeline: fetch diff -> render prompt -> ask Gemini -> post to Slack
+- [x] Live end-to-end test against a real GitHub PR, via ngrok
 - [ ] Full agentic tool-calling loop (LLM dynamically choosing which
       tools to call, rather than a fixed diff -> review -> post pipeline)
-- [ ] Live end-to-end test against a real GitHub PR (needs a public URL)
+- [ ] Permanent public URL (ngrok free tier URL changes on every
+      restart, requiring the GitHub webhook URL to be updated each time)
+
+## Testing with a real GitHub PR (via ngrok)
+
+1. Install ngrok, sign up at https://dashboard.ngrok.com, and run
+   ngrok config add-authtoken YOUR_TOKEN.
+2. Start the host: uv run python src\pr_reviewer_mcp_host\main.py
+3. In a second terminal: ngrok http 8000 - copy the https://...ngrok-free.dev URL it prints.
+4. On GitHub: repo -> Settings -> Webhooks -> Add webhook.
+   - Payload URL: <ngrok URL>/webhook/github
+   - Content type: application/json
+   - Secret: must exactly match GITHUB_WEBHOOK_SECRET in the host's .env
+   - Events: select only "Pull requests"
+5. Open a real PR against the repo. Check the host's terminal for a
+   200 OK log line, then check your configured Slack channel for the
+   posted review.
+
+Note: ngrok's free tier assigns a new random URL every time you
+restart it - update the webhook's Payload URL on GitHub to match
+whenever that happens.
