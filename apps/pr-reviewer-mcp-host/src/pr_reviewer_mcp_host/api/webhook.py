@@ -59,7 +59,7 @@ def verify_github_signature(payload_body: bytes, signature_header: str | None) -
 async def _fetch_pr_diff(diff_url: str) -> str:
     token = os.environ.get("GITHUB_PERSONAL_ACCESS_TOKEN")
     headers = {"Authorization": f"Bearer {token}"} if token else {}
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(follow_redirects=True) as client:
         response = await client.get(diff_url, headers=headers)
     response.raise_for_status()
     return response.text
