@@ -1,4 +1,6 @@
-﻿# my-pr-reviewer
+![Architecture Diagram](assets/architecture.png)
+
+# my-pr-reviewer
 
 An enterprise-grade PR reviewer built on MCP (Model Context Protocol),
 following the "why MCP breaks old enterprise AI" architecture: a clean
